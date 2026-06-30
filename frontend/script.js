@@ -20,5 +20,5 @@ async function generateQuestions() {
     console.log("Response:", data);
 
     document.getElementById("output").innerText =
-        data.questions;
+    data.questions;
 }
