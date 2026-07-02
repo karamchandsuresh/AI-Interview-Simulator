@@ -1,26 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>AI Interviewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Simulator</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <h1>AI Interviewer</h1>
+    <div class="container">
 
-    <input
-        type="text"
-        id="domain"
-        placeholder="Enter Domain (e.g. Python Developer)"
-    >
+        <h1>🤖 AI Interview Simulator</h1>
 
-    <button onclick="generateQuestions()">
-        Generate Questions
-    </button>
+        <p class="subtitle">
+            Practice AI-generated interviews and receive instant feedback.
+        </p>
 
-    <pre id="output"></pre>
+        <div class="card">
+
+            <label>👨‍💻 Job Role</label>
+
+            <input
+                type="text"
+                id="domain"
+                placeholder="Example: Python Developer">
+
+            <label>🎯 Difficulty</label>
+
+            <select id="difficulty">
+
+                <option value="Easy">Easy</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Hard">Hard</option>
+
+            </select>
+
+            <button onclick="startInterview()">
+                Start Interview
+            </button>
+
+        </div>
+
+        <div id="questionArea"></div>
+
+    </div>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
