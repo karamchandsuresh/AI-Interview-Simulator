@@ -124,13 +124,21 @@ Open the `frontend` folder and launch `index.html` using Live Server (VS Code) o
 
 ## 📸 Screenshots
 
-You can add screenshots here later.
+### 🏠 Home Page
 
-Example:
+![Home Page](images/home.png)
 
-- Home Page
-- Interview Questions
-- AI Evaluation Report
+---
+
+### ❓ Interview Questions
+
+![Interview Questions](images/interview.png)
+
+---
+
+### 📊 AI Evaluation Report
+
+![AI Report](images/report.png)
 
 ---
 
