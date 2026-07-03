@@ -55,8 +55,10 @@ https://ai-interview-simulator-ymw8.onrender.com/
 ## 📂 Project Structure
 
 ```
+## 📂 Project Structure
+
 AI-Interview-Simulator/
-│
+
 ├── backend/
 │   ├── app.py
 │   ├── requirements.txt
@@ -66,6 +68,11 @@ AI-Interview-Simulator/
 │   ├── index.html
 │   ├── script.js
 │   └── style.css
+│
+├── images/
+│   ├── home.png
+│   ├── interview.png
+│   └── report.png
 │
 ├── .gitignore
 └── README.md
