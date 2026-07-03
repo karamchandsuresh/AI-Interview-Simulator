@@ -1,26 +1,24 @@
 let currentQuestions = [];
 
+const API_URL = "https://ai-interview-simulator-ymw8.onrender.com";
+
 async function startInterview() {
 
     const role = document.getElementById("domain").value.trim();
     const difficulty = document.getElementById("difficulty").value;
-    const questionArea = document.getElementById("questionArea");
 
     if (role === "") {
         alert("Please enter a job role.");
         return;
     }
 
-    questionArea.innerHTML = `
-        <div class="card">
-            <h2>Generating Interview...</h2>
-            <p>Please wait while AI prepares your questions.</p>
-        </div>
-    `;
+    const questionArea = document.getElementById("questionArea");
+
+    questionArea.innerHTML = "<h3>Generating Interview...</h3>";
 
     try {
 
-        const response = await fetch("http://127.0.0.1:5000/generate", {
+        const response = await fetch(`${API_URL}/generate`, {
 
             method: "POST",
 
@@ -35,11 +33,11 @@ async function startInterview() {
 
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-            throw new Error(data.error || "Failed to generate interview.");
+            throw new Error("Failed to generate interview.");
         }
+
+        const data = await response.json();
 
         currentQuestions = data.questions
             .split("\n")
@@ -53,24 +51,28 @@ async function startInterview() {
         currentQuestions.forEach((question, index) => {
 
             html += `
-                <div class="question">
 
-                    <p><strong>${question}</strong></p>
+            <div class="question">
 
-                    <textarea
-                        id="answer${index}"
-                        placeholder="Write your answer here..."
-                    ></textarea>
+                <p>${question}</p>
 
-                </div>
+                <textarea
+                    id="answer${index}"
+                    placeholder="Write your answer here..."
+                ></textarea>
+
+            </div>
+
             `;
 
         });
 
         html += `
-            <button onclick="submitInterview()">
+
+            <button id="submitBtn" onclick="submitInterview()">
                 Submit Interview
             </button>
+
         </div>
         `;
 
@@ -81,15 +83,17 @@ async function startInterview() {
     catch (error) {
 
         questionArea.innerHTML = `
-            <div class="card">
-                <h2>Error</h2>
-                <p>${error.message}</p>
-            </div>
+        <div class="card">
+            <h2>Error</h2>
+            <p>${error.message}</p>
+        </div>
         `;
 
     }
 
 }
+
+
 
 async function submitInterview() {
 
@@ -97,24 +101,17 @@ async function submitInterview() {
 
     for (let i = 0; i < currentQuestions.length; i++) {
 
-        answers.push(
-            document.getElementById(`answer${i}`).value
-        );
+        answers.push(document.getElementById(`answer${i}`).value);
 
     }
 
     const questionArea = document.getElementById("questionArea");
 
-    questionArea.innerHTML = `
-        <div class="card">
-            <h2>Evaluating Interview...</h2>
-            <p>Please wait while AI evaluates your answers.</p>
-        </div>
-    `;
+    questionArea.innerHTML = "<h3>Evaluating your interview...</h3>";
 
     try {
 
-        const response = await fetch("http://127.0.0.1:5000/evaluate", {
+        const response = await fetch(`${API_URL}/evaluate`, {
 
             method: "POST",
 
@@ -125,53 +122,36 @@ async function submitInterview() {
             body: JSON.stringify({
 
                 questions: currentQuestions,
+
                 answers: answers
 
             })
 
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
-            throw new Error(data.error || "Evaluation failed.");
+            throw new Error("Failed to evaluate interview.");
         }
 
-        let report = data.evaluation;
-
-        // Markdown headings
-        report = report.replace(/^## (.*)$/gm, "<h3>$1</h3>");
-
-        // Bold text
-        report = report.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-
-        // Bullet points
-        report = report.replace(/^- (.*)$/gm, "• $1");
-
-        // Line breaks
-        report = report.replace(/\n/g, "<br>");
+        const data = await response.json();
 
         questionArea.innerHTML = `
 
-            <div class="card report-card">
+        <div class="card">
 
-                <h2>📋 AI Interview Report</h2>
+            <h2>AI Interview Report</h2>
 
-                <div class="report">
+            <pre>${data.evaluation}</pre>
 
-                    ${report}
+            <br>
 
-                </div>
+            <button onclick="location.reload()">
 
-                <br>
+                Start New Interview
 
-                <button onclick="location.reload()">
+            </button>
 
-                    Start New Interview
-
-                </button>
-
-            </div>
+        </div>
 
         `;
 
@@ -180,10 +160,15 @@ async function submitInterview() {
     catch (error) {
 
         questionArea.innerHTML = `
-            <div class="card">
-                <h2>Error</h2>
-                <p>${error.message}</p>
-            </div>
+
+        <div class="card">
+
+            <h2>Error</h2>
+
+            <p>${error.message}</p>
+
+        </div>
+
         `;
 
     }
